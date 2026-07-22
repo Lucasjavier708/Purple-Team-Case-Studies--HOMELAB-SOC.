@@ -121,21 +121,31 @@ hydra -l admin -P midiccionary.txt -s 3000 192.168.3.10 http-post-form "/api/log
 
 El script orquestador generó eventos híbridos: intentos fallidos de brute force seguidos de inyecciones SQL variantes. Los IOCs extraídos son: IP 192.168.3.163, payloads admin' or 1=1 --, timestamps 05:42:22 a 05:42:30 UTC, y HTTP 200 exitoso con Rule 100405 disparada. Evidencia: coordinación inteligente entre técnicas.
 
+<img width="2557" height="903" alt="Evento Orq" src="https://github.com/user-attachments/assets/bf87d84b-5f03-4d5a-af9a-5b3bd7b379a4" />
+
+<img width="2557" height="902" alt="LOG 1 Orquestador" src="https://github.com/user-attachments/assets/69ef60d6-1085-4c3a-b8cb-984deda89fc8" />
 
 
-FOTO ORQ
 
 
 ### FUERZA BRUTA 
 
 El script de brute force generó múltiples intentos fallidos (401) contra /api/login entre 05:44:33 y 05:44:36 UTC. IOCs documentados: IP 192.168.3.163, usuario "admin" consistente, 9+ intentos fallidos, culminando en HTTP 200 exitoso. Evidencia: patrón temporal claro de bot atacando credencial específica.
 
-fOTO F BRUTA 
+<img width="2552" height="902" alt="Fuerza bruta evento" src="https://github.com/user-attachments/assets/060bb68d-780b-464b-9e66-8e2f666f99ed" />
+
+<img width="2557" height="903" alt="Captura de pantalla 2026-07-21 111627" src="https://github.com/user-attachments/assets/5b3f00e0-279a-4e66-a8e1-598a9b4c9aab" />
+
 
 
 ### SQL INJECTION 
 
 El script SQLi inyectó payloads variantes: admin' --, ' or '1'='1', admin' or 1=1 --. Timestamps 05:45:53 a 05:45:59 UTC. IOCs: IP 192.168.3.163, payloads exactos, HTTP 200 exitoso con misma Rule 100405. Evidencia: cambio de técnica de ataque después de brute force, bypassing autenticación.
+
+<img width="2557" height="897" alt="evento sqli" src="https://github.com/user-attachments/assets/7873b163-dc9e-4d54-bea1-508a56a3b84e" />
+
+<img width="2554" height="906" alt="Captura de pantalla 2026-07-21 121441" src="https://github.com/user-attachments/assets/df1514f2-59ba-4e25-9cb3-4e8bcf876fd8" />
+
 
 
 # 3. PATRONES Y ANOMALÍAS

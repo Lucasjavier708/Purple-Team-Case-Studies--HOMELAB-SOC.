@@ -22,7 +22,7 @@ Se busca evidencias
 
 # Arquitectura 
 
-
+<img width="818" height="618" alt="Infra general" src="https://github.com/user-attachments/assets/a944ba4b-7184-45be-88c7-63ba51881e05" />
 
 
 

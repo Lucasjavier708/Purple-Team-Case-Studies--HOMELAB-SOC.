@@ -30,23 +30,53 @@ Este es el servidor objetivo. La Bank App corre sin protecciones (vulnerable int
 
 <img width="1024" height="768" alt="Captura de pantalla (1)" src="https://github.com/user-attachments/assets/04153a85-29da-4ff3-a77b-666835ba8450" />
 
+<img width="1024" height="768" alt="Captura de pantalla (5)" src="https://github.com/user-attachments/assets/8d4ad243-ec3e-47e6-94d5-fbc6a9ebfe26" />
+
 
 Nmap
 
 Antes de atacar, necesitamos saber qué puertos están abiertos en el Windows Server y qué servicios corren. Este escaneo es la fase de reconocimiento (footprinting) donde identificamos la superficie de ataque disponible.
 
+<img width="1020" height="710" alt="fuezabruta" src="https://github.com/user-attachments/assets/1ce4d22c-c25d-452f-b309-ef215d65a1b4" />
+
+
 BurpSuit
 
 Configuramos Burpsuit en modo proxy listening en 127.0.0.1:8080, activamos Intercept, y capturamos las peticiones legítimas a la Bank App.Al activar el módulo Intercept, capturamos cada petición POST al endpoint /api/login, permitiéndonos examinar los parámetros de usuario y contraseña, los headers HTTP, y las respuestas del servidor. Este análisis manual es crucial antes de automatizar ataques, ya que identificamos patrones de error, tiempos de respuesta, y validaciones que luego configuraremos en los scripts de Hydra y SQLi.
+
+
+
+<img width="1024" height="768" alt="Screenshot_2026-07-21_10_06_11" src="https://github.com/user-attachments/assets/47f00d77-82c5-4a69-9136-e85a1bb110f1" />
+
+<img width="1024" height="768" alt="Screenshot_2026-07-21_10_06_57" src="https://github.com/user-attachments/assets/55021553-bda4-400b-a6fe-3544b3ad55ed" />
+
+<img width="1024" height="768" alt="Screenshot_2026-07-21_10_07_07" src="https://github.com/user-attachments/assets/7e9f346d-24ab-45fe-b4ca-0185e1b9a032" />
+
+<img width="1024" height="768" alt="Screenshot_2026-07-21_10_07_32" src="https://github.com/user-attachments/assets/13d3cb61-3594-47ed-9574-4082aaca2d7b" />
+
+
+
+
 
 scripts automatizados
 
 En /redlab-attacks se encuentran los tres pilares de la automatización: orchestrator.sh que coordina todo el ataque, attack_brute_force.sh que ejecuta Hydra contra /api/login, y attack_sqli.sh que prueba inyecciones SQL. Los diccionarios y wordlists (midiccionaries.txt) alimentan los ataques, mientras que los archivos de output registran cada intento exitoso y fallido.
 
+<img width="1024" height="768" alt="redlab" src="https://github.com/user-attachments/assets/b9d2a711-bb33-47e2-aecc-54c0ae003d6b" />
+
 
 **El orchestrator.sh** es el script maestro que coordina todos los ataques. Al ejecutarse, inicia automáticamente el ataque de brute force contra /api/login usando Hydra, espera a que termine, luego lanza el ataque de SQL injection. Cada fase se marca con [+] al comenzar y [✓] al completarse. Al finalizar ambos ataques, genera un resumen de sesión con todos los eventos registrados.
 
+<img width="1024" height="768" alt="Orquestador 1" src="https://github.com/user-attachments/assets/54dc44d1-d99c-4271-b6dd-0f458fcc0c85" />
+
+<img width="1024" height="768" alt="Orquestador 2" src="https://github.com/user-attachments/assets/4b09f48c-878d-4534-a35c-03db4dc980c1" />
+
+
 **Attack_brute_force***.sh automatiza el ataque que hicimos manualmente en Burpsuit. Hydra toma la estructura POST que vimos (/api/login:username=USER&password=PASS) y la replica miles de veces con diferentes contraseñas del diccionario. El comando hydra -l admin -P midiccionary.txt -s 3000 192.168.3.10 http-post-form "/api/login:username=USER&password=PASS:i:F=Usuario o contraseña inválido" automatiza exactamente lo que interceptamos en Burpsuit: envíos POST al /api/login con parámetro username y password. La cadena i:F=Usuario o contraseña inválido es la respuesta de error que vimos en Burpsuit, permitiendo a Hydra diferenciar intentos fallidos de exitosos. Cuando Hydra encuentra una contraseña válida, Wazuh registra ese acceso exitoso como evento de seguridad.
+
+<img width="1020" height="710" alt="fuezabruta" src="https://github.com/user-attachments/assets/e7e93869-3fc5-4ff0-a6ae-d6a70b311bde" />
+
+
 
 ## Comando Hydra - 
 
@@ -69,6 +99,10 @@ hydra -l admin -P midiccionary.txt -s 3000 192.168.3.10 http-post-form "/api/log
 
 
 **Attack_sqli.sh** automatiza inyecciones SQL contra /api/login. Envía payloads maliciosos como admin' or '1'='1 -- en los campos de usuario y contraseña para bypassear la validación. El servidor intenta ejecutar estas consultas y responde con HTTP 200 si la inyección funciona. Wazuh captura cada intento como evento de ataque SQLi.
+
+
+0<img width="1024" height="768" alt="Sqli" src="https://github.com/user-attachments/assets/f0e1400a-fe3a-4ef7-a430-3be0a289f059" />
+
 
 ------------------------------------- 
 

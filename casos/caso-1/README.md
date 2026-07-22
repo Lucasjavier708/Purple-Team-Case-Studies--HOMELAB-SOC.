@@ -6,12 +6,11 @@
 generar eventos de ataque realistas contra una aplicación web vulnerable para que el SIEM (Wazuh) pueda detectarlos, registrarlos y generar alertas. Básicamente es crear un escenario de incidente de seguridad controlado donde puedas estudiar cómo se ve un ataque desde la perspectiva del SOC. , se vana usar scripts automatizados en donde van a ser explicados paso a paso
 
 ## Arquitectura
-
-
-
-
-
 lo que vamos a hace ahora es levantar la App web que tenemos de prueba en donde vamos a realizar los ataques , esta pagina tiene vulnerabilidaddes aproposito para poder realizar los ataques y ver en como son los eventos como se comportan, la pagina esta compuesta por bases de datos SQl server , node js y distinto tipos de vulnerabilidades 
+
+<img width="808" height="608" alt="Caso Diagrama" src="https://github.com/user-attachments/assets/a322f426-e69c-405c-aad4-f4a41cf4d31a" />
+
+
 
 ## Herramientas 
 

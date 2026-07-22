@@ -153,6 +153,11 @@ El script SQLi inyectó payloads variantes: admin' --, ' or '1'='1', admin' or 1
 ### CAPTURA 1: Timeline de Eventos (Franja Horaria)
 La vista temporal muestra eventos concentrados entre 10:10-10:14 UTC. Los picos verdes indican densidad anómala: 9 intentos en 30 segundos es comportamiento de bot, no usuario legítimo. Primera indicación de brute force automatizado.
 
+
+<img width="2554" height="498" alt="Captura de pantalla 2026-07-21 182441" src="https://github.com/user-attachments/assets/05ce1168-87dc-4573-ac02-5d42af226773" />
+
+
+
 ### CAPTURA 2: Búsqueda de Payloads SQLI
 Al filtrar por inyecciones SQL, vemos variantes de payloads (`admin' --`, `admin' or '1'='1'`, etc.). La progresión fallido → exitoso demuestra que el atacante **iteró y refinó** la técnica hasta encontrar una funcional. Ataque inteligente, no accidental.
 

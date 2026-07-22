@@ -97,7 +97,7 @@ Se busca evidencias
 
 | Caso | Descripción |
 |------|------------|
-| [🎯 Orchestrated Attack Framework: Multi-Stage Brute Force & SQLi with Real-Time SIEM Detection (Wazuh)](./casos/brute-force-ssh) | Ataque orquestado  |
+| [🎯 Orchestrated Attack Framework: Multi-Stage Brute Force & SQLi with Real-Time SIEM Detection (Wazuh)](./casos/caso-1) | Ataque orquestado |
 | [🌐 DNS Tunneling](./casos/dns-tunneling) | Túnel DNS exfiltrando datos confidenciales. Detección con Machine Learning (Isolation Forest). Análisis de patrones anómalos de tráfico DNS y correlación de eventos. |
 | [🔄 Lateral Movement](./casos/lateral-movement) | Movimiento lateral en red Windows. Escalada de privilegios con técnicas de post-explotación. Monitoreo con Sysmon y Wazuh SIEM. |
 | [📊 Log Analysis & Incident Response](./casos/log-analysis) | Análisis profundo de eventos de seguridad. Correlación de alertas multi-fuente. Respuesta a incidentes y investigación forense. |

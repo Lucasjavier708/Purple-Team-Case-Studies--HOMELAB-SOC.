@@ -38,7 +38,8 @@ Nmap
 
 Antes de atacar, necesitamos saber qué puertos están abiertos en el Windows Server y qué servicios corren. Este escaneo es la fase de reconocimiento (footprinting) donde identificamos la superficie de ataque disponible.
 
-<img width="1020" height="710" alt="fuezabruta" src="https://github.com/user-attachments/assets/1ce4d22c-c25d-452f-b309-ef215d65a1b4" />
+<img width="1024" height="768" alt="nmap1" src="https://github.com/user-attachments/assets/656bac1d-1819-4b5d-bd79-1a806503f6ec" />
+
 
 
 BurpSuit

@@ -28,7 +28,8 @@ APP
 
 Este es el servidor objetivo. La Bank App corre sin protecciones (vulnerable intencionalmente) para que podamos simular ataques reales: brute force contra el endpoint /api/login y SQL injection en los campos de usuario y contraseña.
 
-<img width="828" height="622" alt="Diagrama sin título" src="https://github.com/user-attachments/assets/78d88b79-ce65-4dcd-ac8c-d17b6c527b0f" />
+<img width="1024" height="768" alt="Captura de pantalla (1)" src="https://github.com/user-attachments/assets/04153a85-29da-4ff3-a77b-666835ba8450" />
+
 
 Nmap
 

@@ -109,11 +109,15 @@ hydra -l admin -P midiccionary.txt -s 3000 192.168.3.10 http-post-form "/api/log
 
 
 ------------------------------------- 
+<img width="2554" height="974" alt="Captura de pantalla 2026-07-20 210513" src="https://github.com/user-attachments/assets/ea22a075-1d0d-4de7-a5a3-d6914dcb3958" />
 
 
  ## Monitoreo
 
  Aca es la ventana hacia lo que sucedió en el servidor objetivo. A través del dashboard de Wazuh, visualizamos la línea temporal completa del incidente: los intentos fallidos del brute force, los payloads SQLi variantes, y finalmente los accesos exitosos. Como analistas, extraemos IOCs (Indicadores de Compromiso), identificamos patrones anómalos, y documentamos la cadena de eventos para el reporte de seguridad.
+
+
+<img width="2544" height="907" alt="Captura de pantalla 2026-07-21 172021" src="https://github.com/user-attachments/assets/9c5bd579-6e05-403a-9d2e-854f082f3c38" />
 
 
 
@@ -156,13 +160,23 @@ La vista temporal muestra eventos concentrados entre 10:10-10:14 UTC. Los picos 
 
 <img width="2554" height="498" alt="Captura de pantalla 2026-07-21 182441" src="https://github.com/user-attachments/assets/05ce1168-87dc-4573-ac02-5d42af226773" />
 
+<img width="2541" height="781" alt="Captura de pantalla 2026-07-21 182524" src="https://github.com/user-attachments/assets/6395df00-8422-446f-8bfb-0ffa40a1d369" />
 
 
 ### CAPTURA 2: Búsqueda de Payloads SQLI
 Al filtrar por inyecciones SQL, vemos variantes de payloads (`admin' --`, `admin' or '1'='1'`, etc.). La progresión fallido → exitoso demuestra que el atacante **iteró y refinó** la técnica hasta encontrar una funcional. Ataque inteligente, no accidental.
 
+
+<img width="2550" height="806" alt="payload sqli" src="https://github.com/user-attachments/assets/56815818-beff-4d70-b2f8-164590c4c9a8" />
+
+
+<img width="2548" height="907" alt="payload sqli jason" src="https://github.com/user-attachments/assets/d59c41b8-826c-4805-8619-21d1008fa26b" />
+
+
 ### CAPTURA 3: Detalles JSON del Evento
 El drill-down muestra: timestamp exacto, IP origen, payload exacto, HTTP 200 (exitoso), Rule 100405 disparada. Confirma acceso exitoso real y documenta evidencia forense completa para análisis.
+
+
 
 ---
 

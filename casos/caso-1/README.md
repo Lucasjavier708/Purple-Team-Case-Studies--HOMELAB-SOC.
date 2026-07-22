@@ -15,7 +15,18 @@ lo que vamos a hace ahora es levantar la App web que tenemos de prueba en donde 
 
 ## Herramientas 
 
+![Kali Linux](https://img.shields.io/badge/Kali%20Linux-Penetration%20Testing-557C94?style=flat-square&logo=linux&logoColor=white)
+![Hydra](https://img.shields.io/badge/Hydra-Brute%20Force-FF6B6B?style=flat-square&logo=python&logoColor=white)
+![Burpsuit](https://img.shields.io/badge/Burpsuit-Web%20Proxy-FF9900?style=flat-square&logo=firefox&logoColor=white)
+![Nmap](https://img.shields.io/badge/Nmap-Port%20Scanner-4169E1?style=flat-square&logo=network&logoColor=white)
 
+
+![Windows Server](https://img.shields.io/badge/Windows%20Server-2019-0078D4?style=flat-square&logo=windows&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-Bank%20App-339933?style=flat-square&logo=node.js&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-2019-CC2927?style=flat-square&logo=microsoft-sql-server&logoColor=white)
+
+
+![Wazuh](https://img.shields.io/badge/Wazuh-4.x%20SIEM-0078D4?style=flat-square&logo=security&logoColor=white)
 
 
 

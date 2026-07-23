@@ -4,15 +4,15 @@
 
 HOMELAB/SOC  es un proyecto de ciberseguridad basado en la construcción y documentación de un laboratorio práctico (HOMELAB), diseñado para simular el funcionamiento de un Centro de Operaciones de Seguridad (SOC).
 
-El proyecto reúne diferentes casos de estudio que recrean escenarios reales de ciberseguridad, permitiendo observar cómo se ejecutan, detectan, analizan, investigan y mitigan distintos eventos e incidentes de seguridad dentro de un entorno controlado.
+El proyecto junta diferentes casos de estudio que recrean escenarios reales de ciberseguridad, permitiendo observar cómo se ejecutan, detectan, analizan, investigan y mitigan distintos eventos e incidentes de seguridad dentro de un entorno controlado.
 
-Cada caso documenta el proceso completo, desde la ejecución de un ataque y la utilización de diferentes tecnologías hasta su detección, análisis y respuesta desde la perspectiva de un Operador SOC Nivel 1. De esta manera, esta infraestructura HOMELAB/SOC funciona tanto como un entorno de práctica técnica como un repositorio de documentación orientado al aprendizaje y al desarrollo de habilidades en ciberseguridad.
+Cada caso documenta el proceso completo, desde la ejecución de un ataque y la utilización de diferentes tecnologías hasta su detección, análisis y respuesta desde la perspectiva de un Operador SOC Nivel 1. 
 
 # Objetivo 
 
-Demostrar conocimientos y habilidades prácticas en ciberseguridad mediante la construcción y operación de una infraestructura HOMELAB/SOC, documentando casos de estudio que simulan escenarios de seguridad informática.
+Demostrar conocimientos y habilidades prácticas en ciberseguridad mediante la construcción y operación de una infraestructura HOMELAB/SOC, 
 
-Se busca evidencias 
+Se va a buscar 
 
 -  Diseño e implementación de una infraestructura HOMELAB/SOC
 -  Simulación y documentación de escenarios de ataque y defensa.

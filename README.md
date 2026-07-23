@@ -1,4 +1,4 @@
-<img src="media/blueteam.jpg" width="330"> <img src="media/redteam.jpg" width="330"> <img src="media/wazuh.jpg" width="330">
+<img src="media/blueteam.jpg" width="230"> <img src="media/redteam.jpg" width="230"> <img src="media/wazuh.jpg" width="230">
 
 #   HOMELAB/SOC  *Analisis de Casos de Estudio*
 

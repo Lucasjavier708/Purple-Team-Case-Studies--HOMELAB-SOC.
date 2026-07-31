@@ -9,8 +9,6 @@ El objetivo del proyecto es demostrar conocimientos prácticos en ciberseguridad
 
 # Objetivo 
 
-## Objetivo
-
 Demostrar conocimientos y habilidades prácticas en ciberseguridad mediante el desarrollo de casos de estudio, utilizando herramientas y técnicas de Red Team y Blue Team, y aplicando procesos de detección, análisis y respuesta dentro de un entorno HomeLab/SOC.
 
 

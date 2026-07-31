@@ -5,11 +5,9 @@ Este proyecto está orientado al desarrollo y documentación de casos prácticos
 
 Cada caso de estudio comienza con la ejecución de un escenario de ataque (Red Team) y continúa con su detección, análisis, investigación y respuesta desde la perspectiva de un Centro de Operaciones de Seguridad (SOC). Todos los casos son documentados desde su planificación hasta su conclusión.
 
-El objetivo del proyecto es demostrar conocimientos prácticos en ciberseguridad mediante la implementación de una infraestructura de laboratorio, la utilización de herramientas y la aplicación de metodologías y procedimientos empleados en entornos profesionales.
+## Objetivo
+Demostrar conocimientos prácticos en ciberseguridad mediante la implementación de una infraestructura de laboratorio, la utilización de herramientas , la aplicación de metodologías y procedimientos empleados en entornos profesionales.
 
-# Objetivo 
-
-Demostrar conocimientos y habilidades prácticas en ciberseguridad mediante el desarrollo de casos de estudio, utilizando herramientas y técnicas de Red Team y Blue Team, y aplicando procesos de detección, análisis y respuesta dentro de un entorno HomeLab/SOC.
 
 
 # Arquitectura 

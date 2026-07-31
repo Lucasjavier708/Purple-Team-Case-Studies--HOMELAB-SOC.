@@ -1,25 +1,18 @@
 <img src="media/blueteam.jpg" width="230"> <img src="media/redteam.jpg" width="230"> <img src="media/wazuh.jpg" width="230">
 
 #   HOMELAB/SOC  *Analisis de Casos de Estudio*
+Este proyecto está orientado al desarrollo y documentación de casos prácticos que simulan escenarios reales de ataque y defensa dentro de mi HomeLab.
 
-HOMELAB/SOC  es un proyecto de ciberseguridad basado en la construcción y documentación de un laboratorio práctico (HOMELAB), diseñado para simular el funcionamiento de un Centro de Operaciones de Seguridad (SOC).
+Cada caso de estudio comienza con la ejecución de un escenario de ataque (Red Team) y continúa con su detección, análisis, investigación y respuesta desde la perspectiva de un Centro de Operaciones de Seguridad (SOC). Todos los casos son documentados desde su planificación hasta su conclusión.
 
-El proyecto junta diferentes casos de estudio que recrean escenarios reales de ciberseguridad, permitiendo observar cómo se ejecutan, detectan, analizan, investigan y mitigan distintos eventos e incidentes de seguridad dentro de un entorno controlado.
-
-Cada caso documenta el proceso completo, desde la ejecución de un ataque y la utilización de diferentes tecnologías hasta su detección, análisis y respuesta desde la perspectiva de un Operador SOC Nivel 1. 
+El objetivo del proyecto es demostrar conocimientos prácticos en ciberseguridad mediante la implementación de una infraestructura de laboratorio, la utilización de herramientas y la aplicación de metodologías y procedimientos empleados en entornos profesionales.
 
 # Objetivo 
 
-Demostrar conocimientos y habilidades prácticas en ciberseguridad mediante la construcción y operación de una infraestructura HOMELAB/SOC, 
+## Objetivo
 
-Se va a buscar 
+Demostrar conocimientos y habilidades prácticas en ciberseguridad mediante el desarrollo de casos de estudio, utilizando herramientas y técnicas de Red Team y Blue Team, y aplicando procesos de detección, análisis y respuesta dentro de un entorno HomeLab/SOC.
 
--  Diseño e implementación de una infraestructura HOMELAB/SOC
--  Simulación y documentación de escenarios de ataque y defensa.
--  Detección, análisis, investigación y respuesta ante eventos e incidentes de seguridad.
--  Utilización de herramientas y tecnologías empleadas en entornos profesionales
--  Aplicación de metodologías y buenas prácticas de Blue Team y Centros de Operaciones de Seguridad (SOC).
-- Desarrollo de estrategias de mitigación, prevención y mejora continua frente a amenazas de ciberseguridad
 
 # Arquitectura 
 

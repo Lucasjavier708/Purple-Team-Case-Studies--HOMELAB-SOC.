@@ -10,28 +10,23 @@ Demostrar conocimientos prácticos en ciberseguridad mediante la implementación
 
 
 
-# Arquitectura 
-
-<img width="818" height="618" alt="Infra general" src="https://github.com/user-attachments/assets/a944ba4b-7184-45be-88c7-63ba51881e05" />
-
-<img width="838" height="632" alt="Infra Wazuh" src="https://github.com/user-attachments/assets/fc7cd4ac-7fbf-4375-9b5a-54202f1100a4" />
 
 
+# Arquitectura
 
+Vista general de la infraestructura **HomeLab/SOC**, donde se desarrollan los escenarios de seguridad dentro de la red de laboratorio.
 
+<p align="center">
+  <img width="818" alt="Infraestructura general" src="https://github.com/user-attachments/assets/a944ba4b-7184-45be-88c7-63ba51881e05">
+</p>
 
+---
 
+Vista de la infraestructura **HomeLab/SOC** con los agentes **Wazuh** desplegados en cada equipo, permitiendo el monitoreo centralizado de todos los dispositivos.
 
-
-
-
-
-
-
-
-
-
-
+<p align="center">
+  <img width="838" alt="Infraestructura con Wazuh" src="https://github.com/user-attachments/assets/fc7cd4ac-7fbf-4375-9b5a-54202f1100a4">
+</p>
 
 
 

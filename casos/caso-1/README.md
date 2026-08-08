@@ -30,10 +30,15 @@ generar eventos de ataque realistas contra una aplicación web vulnerable para q
 
 
 
+<div align="center">
 
+## 🔴 Ataque — 🔵 Detección — 🟢 Respuesta
+
+</div>
 
 
  ## Paso a Paso 
+
 
 
 APP
@@ -45,6 +50,7 @@ Este es el servidor objetivo. La Bank App corre sin protecciones (vulnerable int
 <img width="1024" height="768" alt="Captura de pantalla (5)" src="https://github.com/user-attachments/assets/8d4ad243-ec3e-47e6-94d5-fbc6a9ebfe26" />
 
 
+-------
 Nmap
 
 Antes de atacar, necesitamos saber qué puertos están abiertos en el Windows Server y qué servicios corren. Este escaneo es la fase de reconocimiento (footprinting) donde identificamos la superficie de ataque disponible.
@@ -52,6 +58,7 @@ Antes de atacar, necesitamos saber qué puertos están abiertos en el Windows Se
 <img width="1024" height="768" alt="nmap1" src="https://github.com/user-attachments/assets/656bac1d-1819-4b5d-bd79-1a806503f6ec" />
 
 
+------
 
 BurpSuit
 
@@ -91,6 +98,7 @@ En /redlab-attacks se encuentran los tres pilares de la automatización: orchest
 
 <img width="1007" height="592" alt="Captura de pantalla_2026-07-21_11-07-22" src="https://github.com/user-attachments/assets/75bef765-d04c-4e82-b604-1ce547c9abca" />
 
+-----
 
 
 ## Hydra Code- 
@@ -120,6 +128,13 @@ hydra -l admin -P midiccionary.txt -s 3000 192.168.3.10 http-post-form "/api/log
 
 
 ------------------------------------- 
+
+<div align="center">
+
+## 🔴 Ataque — 🔵 Detección — 🟢 Respuesta
+
+</div>
+
 <img width="2554" height="974" alt="Captura de pantalla 2026-07-20 210513" src="https://github.com/user-attachments/assets/ea22a075-1d0d-4de7-a5a3-d6914dcb3958" />
 
 
@@ -140,9 +155,89 @@ El script orquestador generó eventos híbridos: intentos fallidos de brute forc
 
 <img width="2557" height="902" alt="LOG 1 Orquestador" src="https://github.com/user-attachments/assets/69ef60d6-1085-4c3a-b8cb-984deda89fc8" />
 
+## Triage — Escenario: Orquestador (Brute Force + SQL Injection combinados)
 
+**Fuente:** `login_attempts.log` (Bank App) vía agente Wazuh — `Wazuh-windoServ-PC2-Lab`
 
+| # | Campo | Dato obtenido |
+|---|---|---|
+| 1 | Fecha y hora del evento (timestamp) | 21/07/2026 05:42:29.858Z |
+| 2 | Tipo de alerta (rule.description) | Bank App: Successful login detected |
+| 3 | Regla Wazuh (rule.id) | 100405 |
+| 4 | Nivel de alerta (rule.level) | 6 |
+| 5 | Veces que disparó la regla (rule.firedtimes) | 5 |
+| 6 | IP de origen | 192.168.3.163 |
+| 7 | Equipo objetivo (agent.name) | Wazuh-windoServ-PC2-Lab |
+| 8 | IP del equipo objetivo (agent.ip) | 192.168.3.10 |
+| 9 | Usuario afectado | admin' or 1=1 -- |
+| 10 | Código HTTP | 200 |
 
+**Prioridad asignada:** Alta → pasa a Validación.
+
+## Validación - Veredicto: Verdadero Positivo — Escalar
+
+El HTTP 200 no es un login real, el campo usuario tiene el payload Admin´ or 1=1 -- , tipico de bypass por SQLi, no una creddencial legitima.Lo que llama la atencion es el timing: apenas terminan los intentos fallidos de fuerza bruta contra "admin", arranca las inyecciones SQLi casi de inmediato, sin pausa.Eso no es casualidad, es un orquestador que al no lograr entrar por fuerza bruta, cambio de tactica automaticamente y ademas no menos importante la regla haya disparado 5 veces tambien suma, el origen 192.168.3.163 no pertencen a nigun segmento valido de la red 
+
+## IOCs 
+Reputación externa (AbuseIPDB / VirusTotal): No aplica — 192.168.3.163 es una IP privada (RFC1918), sin visibilidad pública.
+
+  - Contexto interno:
+  192.168.3.163 corresponde a la maquina atacante (kali linux) dentro de la topologia de la red
+   - contexto activo del objetivo:
+  192.168.3.10:3000 es el servidor que corre la Bank APP , activo de criticidad alta dentro del ejercicio, por que simula
+  una aplicacion financiera con datos sensibles
+
+  ## Ticket de Escalación
+```
+┌──────────────────────────────────────────────────────────────┐
+│                        🎫 TICKET DE ESCALACIÓN                │
+├──────────────────────────────────────────────────────────────┤
+│ ID: INC-2026-0721-001                                         │
+│ Escenario: Orquestador (Fuerza Bruta + SQL Injection)         │
+│                                                                │
+│ Severidad: 🔴 Alta                                            │
+│ Estado: 🟡 Escalado a L2                                      │
+│ Categoría: Intrusión confirmada / Explotación app web         │
+├──────────────────────────────────────────────────────────────┤
+│ Resumen                                                       │
+│ Acceso exitoso (HTTP 200) en /api/login tras fallo de         │
+│ fuerza bruta contra "admin". El acceso se logró con un        │
+│ payload SQLi, no una credencial real. El cambio de vector     │
+│ inmediato confirma orquestación automatizada.                 │
+├──────────────────────────────────────────────────────────────┤
+│ Datos del Triage                                              │
+│ ├── Fecha/hora: 21/07/2026 05:42:29.858Z                      │
+│ ├── Regla Wazuh: 100405                                       │
+│ ├── Nivel de alerta: 6                                        │
+│ ├── Veces disparada: 5                                        │
+│ ├── IP origen: 192.168.3.163                                  │
+│ ├── Equipo objetivo: Wazuh-windoServ-PC2-Lab                  │
+│ ├── IP equipo objetivo: 192.168.3.10                          │
+│ ├── Usuario afectado: admin' or 1=1 --                        │
+│ └── Código HTTP: 200                                          │
+├──────────────────────────────────────────────────────────────┤
+│ Validación                          VERDADERO POSITIVO        │
+│ El "usuario" es un payload SQLi, no una credencial válida.    │
+│ El timing entre fin de fuerza bruta e inicio de SQLi          │
+│ descarta evento aislado. Origen no autorizado, sin ventana    │
+│ de mantenimiento que lo justifique.                           │
+├──────────────────────────────────────────────────────────────┤
+│ Enriquecimiento                                               │
+│ ├── Reputación externa: No aplica (IP privada / RFC1918)      │
+│ ├── Origen: Máquina atacante, Lab Network                     │
+│ ├── Activo afectado: 192.168.3.10 — Bank App (crítico)        │
+│ └── Pendiente: revisar actividad IP fuera de 05:42–05:46Z     │
+├──────────────────────────────────────────────────────────────┤
+│ Playbook aplicado                                             │
+│ → Playbook de Respuesta — Brute Force / SQL Injection         │
+│   (ver sección final del README)                              │
+├──────────────────────────────────────────────────────────────┤
+│ Analista: SOC L1 — Lucas                                      │
+│ Escalado a: SOC L2                                            │
+│ Fecha: 21/07/2026                                              │
+└──────────────────────────────────────────────────────────────┘
+```
+------
 ### FUERZA BRUTA 
 
 El script de brute force generó múltiples intentos fallidos (401) contra /api/login entre 05:44:33 y 05:44:36 UTC. IOCs documentados: IP 192.168.3.163, usuario "admin" consistente, 9+ intentos fallidos, culminando en HTTP 200 exitoso. Evidencia: patrón temporal claro de bot atacando credencial específica.
@@ -152,7 +247,7 @@ El script de brute force generó múltiples intentos fallidos (401) contra /api/
 <img width="2557" height="903" alt="Captura de pantalla 2026-07-21 111627" src="https://github.com/user-attachments/assets/5b3f00e0-279a-4e66-a8e1-598a9b4c9aab" />
 
 
-
+------
 ### SQL INJECTION 
 
 El script SQLi inyectó payloads variantes: admin' --, ' or '1'='1', admin' or 1=1 --. Timestamps 05:45:53 a 05:45:59 UTC. IOCs: IP 192.168.3.163, payloads exactos, HTTP 200 exitoso con misma Rule 100405. Evidencia: cambio de técnica de ataque después de brute force, bypassing autenticación.

@@ -145,9 +145,9 @@ hydra -l admin -P midiccionary.txt -s 3000 192.168.3.10 http-post-form "/api/log
 <img width="2554" height="974" alt="Captura de pantalla 2026-07-20 210513" src="https://github.com/user-attachments/assets/ea22a075-1d0d-4de7-a5a3-d6914dcb3958" />
 
 
- ## Monitoreo
+ ## 🔵 **Monitoreo**
 
- Aca es la ventana hacia lo que sucedió en el servidor objetivo. A través del dashboard de Wazuh, visualizamos la línea temporal completa del incidente: los intentos fallidos del brute force, los payloads SQLi variantes, y finalmente los accesos exitosos. Como analistas, extraemos IOCs (Indicadores de Compromiso), identificamos patrones anómalos, y documentamos la cadena de eventos para el reporte de seguridad.
+
 
 
 <img width="2544" height="907" alt="Captura de pantalla 2026-07-21 172021" src="https://github.com/user-attachments/assets/9c5bd579-6e05-403a-9d2e-854f082f3c38" />

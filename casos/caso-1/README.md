@@ -4,7 +4,7 @@
 
 ## Objetivo 
 
-generar eventos de ataque realistas contra una aplicación web vulnerable para que el SIEM (Wazuh) pueda detectarlos, registrarlos y generar alertas. Básicamente es crear un escenario de incidente de seguridad controlado donde puedas estudiar cómo se ve un ataque desde la perspectiva del SOC. , se vana usar scripts automatizados en donde van a ser explicados paso a paso
+Generar eventos de ataque realistas contra una aplicación web vulnerable para que el SIEM (Wazuh) pueda detectarlos, registrarlos y generar alertas. Básicamente es crear un escenario de incidente de seguridad controlado donde puedas estudiar cómo se ve un ataque desde la perspectiva del SOC. , se vana usar scripts automatizados en donde van a ser explicados paso a paso
 
 ## Arquitectura
 

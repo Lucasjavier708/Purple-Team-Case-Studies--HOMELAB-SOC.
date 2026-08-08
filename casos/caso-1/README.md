@@ -1,6 +1,18 @@
 
 
-## Orchestrated Attack Framework: Multi-Stage Brute Force & SQLi with Real-Time SIEM Detection (Wazuh)
+<div align="center">
+
+# 🛡️ Orchestrated Attack Framework
+
+### Multi-Stage Brute Force & SQLi with Real-Time SIEM Detection
+
+**`Wazuh`** `·` **`Kali Linux`** `·` **`Hydra`** `·` **`Burp Suite`**
+
+---
+
+🔴 **Ataque** &nbsp;→&nbsp; 🔵 **Detección** &nbsp;→&nbsp; 🟢 **Respuesta**
+
+</div>
 
 ## Objetivo 
 
@@ -29,13 +41,7 @@ Generar eventos de ataque realistas contra una aplicación web vulnerable para q
 ![Wazuh](https://img.shields.io/badge/Wazuh-4.x%20SIEM-0078D4?style=flat-square&logo=security&logoColor=white)
 
 
-
-<div align="center">
-
-## 🔴 Ataque — 🔵 Detección — 🟢 Respuesta
-
-</div>
-
+----
 
  ## Paso a Paso 
 
@@ -76,6 +82,7 @@ Configuramos Burpsuit en modo proxy listening en 127.0.0.1:8080, activamos Inter
 
 
 
+-----
 
 
 scripts automatizados

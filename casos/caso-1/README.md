@@ -254,6 +254,92 @@ El script de brute force generó múltiples intentos fallidos (401) contra /api/
 <img width="2557" height="903" alt="Captura de pantalla 2026-07-21 111627" src="https://github.com/user-attachments/assets/5b3f00e0-279a-4e66-a8e1-598a9b4c9aab" />
 
 
+## Triage — Escenario: Fuerza Bruta 
+
+
+| # | Campo | Dato obtenido |
+|---|---|---|
+| 1 | Fecha y hora del evento (timestamp) | 2026-07-21 05:44:36.967Z|
+| 2 | Tipo de alerta (rule.description) | Bank App: Successful login detected |
+| 3 | Regla Wazuh (rule.id) | 100405 |
+| 4 | Nivel de alerta (rule.level) | 6 |
+| 5 | Veces que disparó la regla (rule.firedtimes) | 6 |
+| 6 | IP de origen | 192.168.3.163 |
+| 7 | Equipo objetivo (agent.name) | Wazuh-windoServ-PC2-Lab |
+| 8 | IP del equipo objetivo (agent.ip) | 192.168.3.10 |
+| 9 | Usuario afectado | username=admin  |
+| 10 | Código HTTP | 200 |
+
+**Prioridad asignada:** Alta → pasa a Validación.
+
+## Validación - Veredicto: Verdadero Positivo — Escalar
+
+Después de varios intentos fallidos (401) contra el usuario "admin", se registró un acceso exitoso (200) — la regla 100405 ya lleva 6 disparos, lo que confirma que no es un evento aislado. Que una fuerza bruta termine en acceso  sobre una cuenta con privilegios es justo el escenario que se quiere encontrar , así que se define como verdadero positivo y se escala para revisión.
+
+## IOCs 
+Reputación externa (AbuseIPDB / VirusTotal): No aplica — 192.168.3.163 es una IP privada (RFC1918), sin visibilidad pública.
+
+  - Contexto interno:
+  192.168.3.163 corresponde a la maquina atacante (kali linux) dentro de la topologia de la red
+   - contexto activo del objetivo:
+  192.168.3.10:3000 es el servidor que corre la Bank APP , activo de criticidad alta dentro del ejercicio, por que simula
+  una aplicacion financiera con datos sensibles
+
+ ## Ticket de Escalación
+```
+┌──────────────────────────────────────────────────────────────┐
+│                        🎫 TICKET DE ESCALACIÓN                │
+├──────────────────────────────────────────────────────────────┤
+│ ID: INC-2026-0721-002                                         │
+│ Escenario: Fuerza Bruta                                       │
+│                                                                │
+│ Severidad: 🔴 Alta                                            │
+│ Estado: 🟡 Escalado a L2                                      │
+│ Categoría: Intrusión confirmada / Compromiso de credencial    │
+├──────────────────────────────────────────────────────────────┤
+│ Resumen                                                       │
+│ Múltiples intentos fallidos (401) contra la cuenta "admin"    │
+│ culminaron en un acceso exitoso (200) en /api/login. La       │
+│ credencial fue obtenida por fuerza bruta, sin uso de payload  │
+│ SQLi — acceso legítimo del sistema pero de origen malicioso.  │
+├──────────────────────────────────────────────────────────────┤
+│ Datos del Triage                                              │
+│ ├── Fecha/hora (full_log): 21/07/2026 05:44:36.967Z           │
+│ ├── Regla Wazuh: 100405                                       │
+│ ├── Nivel de alerta: 6                                        │
+│ ├── Veces disparada: 6                                        │
+│ ├── IP origen: 192.168.3.163                                  │
+│ ├── Equipo objetivo: Wazuh-windoServ-PC2-Lab                  │
+│ ├── IP equipo objetivo: 192.168.3.10                          │
+│ ├── Usuario afectado: admin                                    │
+│ └── Código HTTP: 200                                          │
+├──────────────────────────────────────────────────────────────┤
+│ Validación                          VERDADERO POSITIVO        │
+│ Intentos fallidos repetidos (401) precedieron el acceso       │
+│ exitoso (200) sobre la misma cuenta. 6 disparos de la regla   │
+│ descartan evento aislado — patrón consistente con fuerza      │
+│ bruta automatizada que logró comprometer la credencial.       │
+├──────────────────────────────────────────────────────────────┤
+│ Enriquecimiento                                               │
+│ ├── Reputación externa: No aplica (IP privada / RFC1918)      │
+│ ├── Origen: Máquina atacante (Kali Linux), Lab Network         │
+│ ├── Activo afectado: 192.168.3.10 — Bank App (crítico)        │
+│ └── Pendiente: confirmar si "admin" es cuenta con privilegios │
+│     elevados dentro de la app                                 │
+├──────────────────────────────────────────────────────────────┤
+│ Playbook aplicado                                             │
+│ → Playbook de Respuesta — Brute Force                         │
+│   (ver sección final del README)                              │
+├──────────────────────────────────────────────────────────────┤
+│ Analista: SOC L1 — Lucas                                      │
+│ Escalado a: SOC L2                                            │
+│ Fecha: 21/07/2026                                              │
+└──────────────────────────────────────────────────────────────┘
+
+```
+ 
+
+
 ------
 ### SQL INJECTION 
 
@@ -263,8 +349,91 @@ El script SQLi inyectó payloads variantes: admin' --, ' or '1'='1', admin' or 1
 
 <img width="2554" height="906" alt="Captura de pantalla 2026-07-21 121441" src="https://github.com/user-attachments/assets/df1514f2-59ba-4e25-9cb3-4e8bcf876fd8" />
 
+## Triage — Escenario: SQLinjection
+
+| # | Campo | Dato obtenido |
+|---|---|---|
+| 1 | Fecha y hora del evento (timestamp) | 2026-07-21 05:45:58.890Z|
+| 2 | Tipo de alerta (rule.description) | Bank App: Successful login detected |
+| 3 | Regla Wazuh (rule.id) | 100405 |
+| 4 | Nivel de alerta (rule.level) | 6 |
+| 5 | Veces que disparó la regla (rule.firedtimes) | 10 |
+| 6 | IP de origen | 192.168.3.163 |
+| 7 | Equipo objetivo (agent.name) | Wazuh-windoServ-PC2-Lab |
+| 8 | IP del equipo objetivo (agent.ip) | 192.168.3.10 |
+| 9 | Usuario afectado | username=admin or 1=1  |
+| 10 | Código HTTP | 200 |
 
 
+## Validación - Veredicto: Verdadero Positivo — Escalar
+
+1=1 significa la forma en que se quiere bypasear un usuario de un formulario en este caso no es un usuario legitimo sino un intento de codigo injection , queda como verdadero positov y se escala 
+
+## IOCs 
+1=1 es la forma clásica de bypassear la validación de un formulario  — no es un usuario legítimo, es una condición que siempre se evalúa como verdadera, permitiendo entrar sin conocer una contraseña . Que la regla haya disparado 10 veces confirma que no fue un intento aislado, sino la iteración de variantes del mismo payload hasta encontrar una que funcione. Queda como verdadero positivo y se escala.
+
+  - Contexto interno:
+  192.168.3.163 corresponde a la maquina atacante (kali linux) dentro de la topologia de la red
+   - contexto activo del objetivo:
+  192.168.3.10:3000 es el servidor que corre la Bank APP , activo de criticidad alta dentro del ejercicio, por que simula
+  una aplicacion financiera con datos sensibles
+
+ ## Ticket de Escalación
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                        🎫 TICKET DE ESCALACIÓN                │
+├──────────────────────────────────────────────────────────────┤
+│ ID: INC-2026-0721-003                                         │
+│ Escenario: SQL Injection                                      │
+│                                                                │
+│ Severidad: 🔴 Alta                                            │
+│ Estado: 🟡 Escalado a L2                                      │
+│ Categoría: Intrusión confirmada / Explotación de vulnerabilidad│
+├──────────────────────────────────────────────────────────────┤
+│ Resumen                                                       │
+│ Acceso exitoso (HTTP 200) en /api/login mediante bypass de    │
+│ autenticación por SQL injection. El payload admin' or 1=1 --  │
+│ manipula la query de validación para que siempre retorne      │
+│ verdadero, sin necesidad de credencial real.                  │
+├──────────────────────────────────────────────────────────────┤
+│ Datos del Triage                                              │
+│ ├── Fecha/hora (full_log): 21/07/2026 05:45:58.890Z           │
+│ ├── Regla Wazuh: 100405                                       │
+│ ├── Nivel de alerta: 6                                        │
+│ ├── Veces disparada: 10                                       │
+│ ├── IP origen: 192.168.3.163                                  │
+│ ├── Equipo objetivo: Wazuh-windoServ-PC2-Lab                  │
+│ ├── IP equipo objetivo: 192.168.3.10                          │
+│ ├── Usuario afectado: admin' or 1=1 --                        │
+│ └── Código HTTP: 200                                          │
+├──────────────────────────────────────────────────────────────┤
+│ Validación                          VERDADERO POSITIVO        │
+│ El payload manipula la lógica de la query SQL para bypasear   │
+│ la autenticación sin credencial real. 10 disparos de la       │
+│ regla confirman iteración de variantes hasta lograr éxito,    │
+│ no un evento accidental.                                      │
+├──────────────────────────────────────────────────────────────┤
+│ Enriquecimiento                                               │
+│ ├── Reputación externa: No aplica (IP privada / RFC1918)      │
+│ ├── Origen: Máquina atacante (Kali Linux), Lab Network         │
+│ ├── Activo afectado: 192.168.3.10 — Bank App (crítico)        │
+│ └── Pendiente: confirmar si la inyección funciona en otros    │
+│     endpoints además de /api/login                            │
+├──────────────────────────────────────────────────────────────┤
+│ Playbook aplicado                                             │
+│ → Playbook de Respuesta —  SQL Injection                      │
+│                                                               │
+├──────────────────────────────────────────────────────────────┤
+│ Analista: SOC L1 — Lucas                                      │
+│ Escalado a: SOC L2                                            │
+│ Fecha: 21/07/2026                                              │
+└──────────────────────────────────────────────────────────────┘
+
+```
+
+
+-------
 # 3. PATRONES Y ANOMALÍAS
 
 ### CAPTURA 1: Timeline de Eventos (Franja Horaria)

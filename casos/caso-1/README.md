@@ -16,7 +16,9 @@
 
 ## Objetivo 
 
-Generar eventos de ataque realistas contra una aplicación web vulnerable para que el SIEM (Wazuh) pueda detectarlos, registrarlos y generar alertas. Básicamente es crear un escenario de incidente de seguridad controlado donde puedas estudiar cómo se ve un ataque desde la perspectiva del SOC. , se vana usar scripts automatizados en donde van a ser explicados paso a paso
+Armar un escenario de ataque controlado contra una app vulnerable a propósito (Bank App) para ver cómo Wazuh detecta, registra y alertá cada movimiento. Me pongo en el lugar del SOC y trabajo el ciclo completo: desde que se genera el evento hasta que lo escalo.
+
+Para eso armé tres scripts: uno de fuerza bruta, uno de SQL injection, y uno que orquesta los dos anteriores simulando un atacante que cambia de técnica si la primera falla. Cada uno genera su propio escenario, con su triage, su playbook y su ticket de escalación.
 
 ## Arquitectura
 
@@ -476,7 +478,7 @@ Acá encontré algo más interesante: 3 accesos exitosos (200) desde la misma IP
 
 ## 5. Mitigación
 
-Cada escenario tiene su playbook (PB-WEB-001-ORQ, PB-WEB-002-FB, PB-WEB-003-SQLI) con su propia contención y lecciones aprendidas, así que en vez de tirar una lista genérica acá, resumo lo que dice cada uno:
+Cada escenario tiene su playbook (PB-ORQ, PB-FB, PB-SQLI) con su propia contención y lecciones aprendidas, así que en vez de tirar una lista genérica acá, resumo lo que dice cada uno:
 
 Contención inmediata:
 

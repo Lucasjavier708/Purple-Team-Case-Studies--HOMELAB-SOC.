@@ -77,6 +77,25 @@ Se activa cuando se detecta un **patrón de múltiples intentos fallidos de aute
 
 Escalar siempre que el resultado del triage sea Verdadero Positivo.
 
+🚨 ALERTA ESCALADA: FUERZA BRUTA — COMPROMISO DE CREDENCIAL
+
+-ID Incidente: INC-2026-0721-002
+
+-IP origen → IP destino / endpoint: 192.168.3.163 → 192.168.3.10:3000 (/api/login)
+
+-Usuario comprometido: admin
+
+-Timestamp del acceso exitoso: 21/07/2026 05:44:36.967Z
+
+-rule.firedtimes: 6
+
+-Técnica MITRE: T1110.001
+
+-Recomendación de contención: Bloqueo de IP 192.168.3.163 en firewall/WAF; reseteo inmediato de credencial "admin"; revisión de sesiones activas
+
+-Evidencia adjunta: capturas de Discover (histograma + full_log del evento)
+
+
 ---
 
 ## 8. Evidencia a Documentar

@@ -77,6 +77,19 @@ Se activa cuando se detectan **2 o más técnicas distintas de acceso** (fuerza 
 
 Escalar siempre que el resultado del triage sea Verdadero Positivo.
 
+🚨 ALERTA ESCALADA: ATAQUE MULTI-VECTOR (FUERZA BRUTA + SQLi)
+
+- ID Incidente: INC-2026-0721-001
+- IP origen → IP destino / endpoint: 192.168.3.163 → 192.168.3.10:3000 (/api/login)
+- Ventana temporal: 21/07/2026 05:42:29Z – 05:45:58Z
+- Eventos correlacionados: 
+  1. 05:42:29Z - SQL Injection - Éxito (200) - firedtimes: 5
+  2. 05:44:36Z - Fuerza Bruta - Éxito (200) - firedtimes: 6
+  3. 05:45:58Z - SQL Injection - Éxito (200) - firedtimes: 10
+- Técnicas MITRE: T1110.001, T1190
+- Recomendación de contención: Bloqueo de IP 192.168.3.163 en firewall/WAF; reseteo de credencial "admin"; revisión de sesiones activas
+- Evidencia adjunta: capturas de Discover (histograma + full_log de los 3 eventos)
+
 ---
 
 ## 8. Evidencia a Documentar

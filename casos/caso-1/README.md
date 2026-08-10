@@ -156,7 +156,7 @@ hydra -l admin -P midiccionary.txt -s 3000 192.168.3.10 http-post-form "/api/log
 
 ### ORQUESTADOR 
 
-El script orquestador generó eventos híbridos: intentos fallidos de brute force seguidos de inyecciones SQL variantes. Los IOCs extraídos son: IP 192.168.3.163, payloads admin' or 1=1 --, timestamps 05:42:22 a 05:42:30 UTC, y HTTP 200 exitoso con Rule 100405 disparada. Evidencia: coordinación inteligente entre técnicas.
+Acá el orchestrator.sh trabaja los dos ataques en cadena: arranca con fuerza bruta contra admin, y si no entra por ahí, pasa solo a probar SQLi. La idea era ver si Wazuh me detectaba el cambio de técnica dentro de la misma sesión, o si me lo tiraba como eventos sueltos sin relacionarlos.
 
 <img width="2557" height="903" alt="Evento Orq" src="https://github.com/user-attachments/assets/bf87d84b-5f03-4d5a-af9a-5b3bd7b379a4" />
 
@@ -237,17 +237,22 @@ Reputación externa (AbuseIPDB / VirusTotal): No aplica — 192.168.3.163 es una
 ├──────────────────────────────────────────────────────────────┤
 │ Playbook aplicado                                             │
 │ → Playbook de Respuesta — Brute Force / SQL Injection         │
-│   (ver sección final del README)                              │
+│                                                              │
 ├──────────────────────────────────────────────────────────────┤
 │ Analista: SOC L1 — Lucas                                      │
 │ Escalado a: SOC L2                                            │
 │ Fecha: 21/07/2026                                              │
 └──────────────────────────────────────────────────────────────┘
 ```
+
+📋 **Playbook** [Brute Force / SQL Injection](https://github.com/Lucasjavier708/Purple-Team-Case-Studies--HOMELAB-SOC./blob/main/casos/caso-1/playbook-orchestrated-attack.md)
+
+
+
 ------
 ### FUERZA BRUTA 
 
-El script de brute force generó múltiples intentos fallidos (401) contra /api/login entre 05:44:33 y 05:44:36 UTC. IOCs documentados: IP 192.168.3.163, usuario "admin" consistente, 9+ intentos fallidos, culminando en HTTP 200 exitoso. Evidencia: patrón temporal claro de bot atacando credencial específica.
+El attack_brute_force.sh le pegó a /api/login con Hydra, tirando el diccionario de contraseñas contra el usuario admin. Quería ver si Wazuh diferenciaba este patrón (fallos a repetición + éxito con credencial limpia) del de SQLi.
 
 <img width="2552" height="902" alt="Fuerza bruta evento" src="https://github.com/user-attachments/assets/060bb68d-780b-464b-9e66-8e2f666f99ed" />
 
@@ -329,7 +334,7 @@ Reputación externa (AbuseIPDB / VirusTotal): No aplica — 192.168.3.163 es una
 ├──────────────────────────────────────────────────────────────┤
 │ Playbook aplicado                                             │
 │ → Playbook de Respuesta — Brute Force                         │
-│   (ver sección final del README)                              │
+│                                                               │
 ├──────────────────────────────────────────────────────────────┤
 │ Analista: SOC L1 — Lucas                                      │
 │ Escalado a: SOC L2                                            │
@@ -337,13 +342,13 @@ Reputación externa (AbuseIPDB / VirusTotal): No aplica — 192.168.3.163 es una
 └──────────────────────────────────────────────────────────────┘
 
 ```
- 
 
+📋 **Playbook:** [Brute Force](https://github.com/Lucasjavier708/Purple-Team-Case-Studies--HOMELAB-SOC./blob/main/casos/caso-1/Playbook-brute-force.md)
 
 ------
 ### SQL INJECTION 
 
-El script SQLi inyectó payloads variantes: admin' --, ' or '1'='1', admin' or 1=1 --. Timestamps 05:45:53 a 05:45:59 UTC. IOCs: IP 192.168.3.163, payloads exactos, HTTP 200 exitoso con misma Rule 100405. Evidencia: cambio de técnica de ataque después de brute force, bypassing autenticación.
+El attack_sqli.sh probó varias variantes de payload contra /api/login para saltarse el login sin necesitar una credencial real. Lo que buscaba acá era confirmar si Wazuh me detectaba el bypass como acceso exitoso y si quedaba el payload registrado en el log.
 
 <img width="2557" height="897" alt="evento sqli" src="https://github.com/user-attachments/assets/7873b163-dc9e-4d54-bea1-508a56a3b84e" />
 
@@ -423,7 +428,7 @@ El script SQLi inyectó payloads variantes: admin' --, ' or '1'='1', admin' or 1
 ├──────────────────────────────────────────────────────────────┤
 │ Playbook aplicado                                             │
 │ → Playbook de Respuesta —  SQL Injection                      │
-│                                                               │
+│                                                              │
 ├──────────────────────────────────────────────────────────────┤
 │ Analista: SOC L1 — Lucas                                      │
 │ Escalado a: SOC L2                                            │
@@ -432,15 +437,16 @@ El script SQLi inyectó payloads variantes: admin' --, ' or '1'='1', admin' or 1
 
 ```
 
+📋 **Playbook:** [SQLinjection](https://github.com/Lucasjavier708/Purple-Team-Case-Studies--HOMELAB-SOC./blob/main/casos/caso-1/Playbook-sql-injection.md)
 
 -------
 # Trhean Hunting 
 
-Después de cerrar el triage de los tres escenarios, hice una pasada de threat hunting sobre toda la ventana horaria para confirmar el patrón por fuera de los tres eventos puntuales ya escalados.
+Después de terminar el triage de los tres casos, me puse a revisar toda la ventana horaria completa para chequear si el patrón se sostenía más allá de los tres eventos que ya había escalado.
 
-Filtrando por rule.id: 2501 entre 10:10 y 10:15 UTC, el histograma muestra dos ráfagas marcadas (9 intentos en 30 segundos, y otro pico similar) en vez de una distribución pareja — comportamiento de bot, no de un usuario tipeando mal.
+Filtré por rule.id: 2501 entre 10:10 y 10:15 UTC y en el histograma se ven dos ráfagas bien marcadas (9 intentos en 30 segundos, y después otro pico parecido), en vez de una distribución más pareja. Eso ya de entrada te dice que no es un usuario cagándose a errores con la contraseña, es un script tirando intentos.
 
-Después busqué puntualmente los payloads de SQLi (full_log: "1' or '1'='1"), con 2 resultados en la misma ventana. Abriendo el JSON de uno de esos eventos confirmo timestamp, IP origen (192.168.3.163), el payload completo y rule.firedtimes: 20 — ver el payload en crudo descarta que sea ruido y confirma una firma de SQLi clásica.
+Después fui a buscar el payload de SQLi puntual (full_log: "1' or '1'='1") y me tiró 2 resultados en esa ventana — los dos son intentos fallidos (401, regla 2501), previos a que finalmente lograra entrar. Abrí el JSON de uno para ver el detalle completo: timestamp, IP origen (192.168.3.163), el payload tal cual y rule.firedtimes: 20. Aunque sea un intento fallido, ver el payload ahí crudo confirma que venía probando esta misma firma de SQLi antes de conseguir el bypass.
 
 
 <img width="2554" height="498" alt="Captura de pantalla 2026-07-21 182441" src="https://github.com/user-attachments/assets/05ce1168-87dc-4573-ac02-5d42af226773" />
@@ -463,23 +469,23 @@ Después busqué puntualmente los payloads de SQLi (full_log: "1' or '1'='1"), c
 
 ## 4. CORRELACIÓN DE EVENTOS
 
-Se identificaron 3 accesos exitosos (HTTP 200) desde 192.168.3.163 en 3 minutos y medio: el primero (05:42:29Z) con SQLi, el segundo (05:44:36Z) con credencial limpia por fuerza bruta, el tercero (05:45:58Z) volviendo a SQLi. Tres accesos, dos técnicas, misma ventana — descarta casualidad y confirma reconocimiento previo más reconfirmación deliberada del acceso.
+Acá encontré algo más interesante: 3 accesos exitosos (200) desde la misma IP 192.168.3.163, todos en 3 minutos y medio. El primero (05:42:29Z) fue con SQLi, el segundo (05:44:36Z) con la credencial admin limpia por fuerza bruta, y el tercero (05:45:58Z) otra vez con SQLi. O sea, no fue un acceso suelto — fueron tres, con dos técnicas distintas, todo en el mismo rango de tiempo. Eso ya descarta casualidad: hubo reconocimiento previo y el tipo volvió a confirmar el acceso después.
 
 ---
 
 
 ## 5. Mitigación
 
-Cada escenario tiene su propio playbook (PB-WEB-001-ORQ, PB-WEB-002-FB, PB-WEB-003-SQLI), con su propia contención y lecciones aprendidas. Resumo la respuesta por escenario en vez de una lista genérica:
+Cada escenario tiene su playbook (PB-WEB-001-ORQ, PB-WEB-002-FB, PB-WEB-003-SQLI) con su propia contención y lecciones aprendidas, así que en vez de tirar una lista genérica acá, resumo lo que dice cada uno:
 
 Contención inmediata:
 
-Orquestador: bloqueo de IP, reseteo de credencial admin, revisión de sesiones activas.
-Fuerza Bruta: bloqueo de IP + reseteo de credencial admin.
-SQLi: bloqueo de IP + revisión urgente de sanitización de inputs en /api/login.
+Orquestador: bloqueo de IP, reseteo de la credencial admin, revisar sesiones activas.
+Fuerza Bruta: bloqueo de IP + reseteo de la credencial admin.
+SQLi: bloqueo de IP + revisar urgente la sanitización de inputs en /api/login.
 
 Remediación:
 
-Fuerza Bruta: falta account lockout — proponer rate limiting (5 intentos/5 min) y regla Wazuh dedicada.
-SQLi: falta prepared statements — proponer parametrizar queries y reglas WAF para patrones comunes (or '1'='1, --).
-Orquestador: Wazuh no distingue el vector dentro del mismo rule.id — proponer regla de correlación que detecte automáticamente "fallo repetido + éxito con sintaxis SQL".
+Fuerza Bruta: no hay lockout de cuenta tras varios intentos fallidos — falta rate limiting (5 intentos cada 5 min) y una regla en Wazuh que lo detecte antes del acceso exitoso.
+SQLi: la app no usa consultas parametrizadas — hay que meter prepared statements y reglas de WAF para patrones típicos (or '1'='1, --).
+Orquestador: Wazuh no distingue qué vector se usó dentro del mismo rule.id, hay que revisarlo a mano. Falta una regla de correlación que detecte solo el patrón de "fallo repetido + éxito con sintaxis SQL".

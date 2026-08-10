@@ -434,10 +434,13 @@ El script SQLi inyectó payloads variantes: admin' --, ' or '1'='1', admin' or 1
 
 
 -------
-# 3. PATRONES Y ANOMALÍAS
+# Trhean Hunting 
 
-### CAPTURA 1: Timeline de Eventos (Franja Horaria)
-La vista temporal muestra eventos concentrados entre 10:10-10:14 UTC. Los picos verdes indican densidad anómala: 9 intentos en 30 segundos es comportamiento de bot, no usuario legítimo. Primera indicación de brute force automatizado.
+Después de cerrar el triage de los tres escenarios, hice una pasada de threat hunting sobre toda la ventana horaria para confirmar el patrón por fuera de los tres eventos puntuales ya escalados.
+
+Filtrando por rule.id: 2501 entre 10:10 y 10:15 UTC, el histograma muestra dos ráfagas marcadas (9 intentos en 30 segundos, y otro pico similar) en vez de una distribución pareja — comportamiento de bot, no de un usuario tipeando mal.
+
+Después busqué puntualmente los payloads de SQLi (full_log: "1' or '1'='1"), con 2 resultados en la misma ventana. Abriendo el JSON de uno de esos eventos confirmo timestamp, IP origen (192.168.3.163), el payload completo y rule.firedtimes: 20 — ver el payload en crudo descarta que sea ruido y confirma una firma de SQLi clásica.
 
 
 <img width="2554" height="498" alt="Captura de pantalla 2026-07-21 182441" src="https://github.com/user-attachments/assets/05ce1168-87dc-4573-ac02-5d42af226773" />
@@ -445,8 +448,7 @@ La vista temporal muestra eventos concentrados entre 10:10-10:14 UTC. Los picos 
 <img width="2541" height="781" alt="Captura de pantalla 2026-07-21 182524" src="https://github.com/user-attachments/assets/6395df00-8422-446f-8bfb-0ffa40a1d369" />
 
 
-### CAPTURA 2: Búsqueda de Payloads SQLI
-Al filtrar por inyecciones SQL, vemos variantes de payloads (`admin' --`, `admin' or '1'='1'`, etc.). La progresión fallido → exitoso demuestra que el atacante **iteró y refinó** la técnica hasta encontrar una funcional. Ataque inteligente, no accidental.
+
 
 
 <img width="2550" height="806" alt="payload sqli" src="https://github.com/user-attachments/assets/56815818-beff-4d70-b2f8-164590c4c9a8" />
@@ -455,55 +457,29 @@ Al filtrar por inyecciones SQL, vemos variantes de payloads (`admin' --`, `admin
 <img width="2548" height="907" alt="payload sqli jason" src="https://github.com/user-attachments/assets/d59c41b8-826c-4805-8619-21d1008fa26b" />
 
 
-### CAPTURA 3: Detalles JSON del Evento
-El drill-down muestra: timestamp exacto, IP origen, payload exacto, HTTP 200 (exitoso), Rule 100405 disparada. Confirma acceso exitoso real y documenta evidencia forense completa para análisis.
-
 
 
 ---
 
 ## 4. CORRELACIÓN DE EVENTOS
 
-Durante el análisis se identificaron **3 accesos exitosos (HTTP 200)** desde la IP atacante 192.168.3.163 en un intervalo de 3 minutos. El primer acceso (05:42:29Z) utilizó el payload SQLi `admin' or 1=1 --`, confirmando que la inyección SQL es efectiva contra la aplicación. El segundo acceso (05:44:36Z) empleó credencial limpia `admin`, evidenciando que el brute force tuvo éxito en obtener la contraseña válida. El tercer acceso (05:45:58Z) reutilizó el mismo payload SQLi, demostrando que el atacante dispone de múltiples vectores de explotación funcionales. La relevancia crítica radica en que el atacante no solo accedió una vez: accedió 3 veces usando técnicas diferentes, lo que indica reconocimiento previo de la vulnerabilidad y reconfirmación de acceso post-infiltración.
+Se identificaron 3 accesos exitosos (HTTP 200) desde 192.168.3.163 en 3 minutos y medio: el primero (05:42:29Z) con SQLi, el segundo (05:44:36Z) con credencial limpia por fuerza bruta, el tercero (05:45:58Z) volviendo a SQLi. Tres accesos, dos técnicas, misma ventana — descarta casualidad y confirma reconocimiento previo más reconfirmación deliberada del acceso.
 
 ---
 
-## 5. MITRE ATT&CK - MAPEO DEL INCIDENTE
 
-### Reconocimiento:
-- **T1046 (Network Service Discovery)** - Nmap scan identificó puertos abiertos (3000, 1433)
+## 5. Mitigación
 
-### Acceso Inicial:
-- **T1190 (Exploit Public-Facing Application)** - SQLi contra endpoint `/api/login`
-- **T1110.001 (Brute Force - Credential Guessing)** - Hydra atacó username "admin" con diccionario
+Cada escenario tiene su propio playbook (PB-WEB-001-ORQ, PB-WEB-002-FB, PB-WEB-003-SQLI), con su propia contención y lecciones aprendidas. Resumo la respuesta por escenario en vez de una lista genérica:
 
-### Ejecución/Persistencia:
-- **T1021.004 (Remote Service Session Hijacking)** - Post-acceso exitoso, el atacante mantiene sesión HTTP 200
+Contención inmediata:
 
-**Por script:**
-- Orquestador: T1190 (SQLi exitosa)
-- Brute Force: T1110.001 (Credencial adivinada)
-- SQLi: T1190 (Inyección SQL variantes)
+Orquestador: bloqueo de IP, reseteo de credencial admin, revisión de sesiones activas.
+Fuerza Bruta: bloqueo de IP + reseteo de credencial admin.
+SQLi: bloqueo de IP + revisión urgente de sanitización de inputs en /api/login.
 
----
+Remediación:
 
-## 6. MITIGACIÓN
-
-### Inmediatas (24 horas):
-
-1. **Bloqueo de IP:** Implementar regla en firewall/WAF bloqueando 192.168.3.163 en todos los puertos
-2. **Cambio de credencial:** Resetear credencial "admin" inmediatamente; forzar cambio de contraseña en todos los usuarios
-3. **Revoke de sesiones:** Terminar todas las sesiones activas de la cuenta admin desde el último acceso legítimo conocido
-
-### Corto plazo (1 semana):
-
-4. **Input Validation:** Implementar sanitización en `/api/login` - validar caracteres especiales (comillas, dashes, comentarios SQL) en campos username/password
-5. **Parameterized Queries:** Refactorizar queries SQL para usar prepared statements en lugar de concatenación de strings
-6. **Rate Limiting:** Configurar máximo 5 intentos fallidos por usuario/IP en 5 minutos, luego account lockout por 15 minutos
-7. **MFA:** Implementar autenticación multifactor (TOTP/SMS) en cuenta admin
-
-### Largo plazo (30 días):
-
-8. **WAF Rules:** Crear reglas en Wazuh/WAF detectando payloads SQLi comunes (`or '1'='1`, `--`, `/**/`) y bloquearlos automáticamente
-9. **Security Testing:** Realizar penetration testing formal contra la Bank App para identificar otras vulnerabilidades
-10. **Logging mejorado:** Aumentar verbosidad de logs para capturar User-Agent, session IDs, y source IP en todos los intentos  
+Fuerza Bruta: falta account lockout — proponer rate limiting (5 intentos/5 min) y regla Wazuh dedicada.
+SQLi: falta prepared statements — proponer parametrizar queries y reglas WAF para patrones comunes (or '1'='1, --).
+Orquestador: Wazuh no distingue el vector dentro del mismo rule.id — proponer regla de correlación que detecte automáticamente "fallo repetido + éxito con sintaxis SQL".

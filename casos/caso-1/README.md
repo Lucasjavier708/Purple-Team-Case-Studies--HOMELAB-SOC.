@@ -22,6 +22,15 @@ Para eso armé tres scripts: uno de fuerza bruta, uno de SQL injection, y uno qu
 
 ## Arquitectura
 
+El lab lo armé con dos redes separadas, simulando un esquema real de SOC.
+
+En la red de laboratorio pasan los ataques: Kali Linux ataca directo al Windows Server, donde corre la Bank App (Node.js + SQL Server). El router de esa red tiene el DHCP apagado, así que el mismo Windows Server actúa como servidor DHCP del laboratorio.
+
+Del otro lado está la red de estudio, donde vive Wazuh y llegan las alertas. Configuré port forwarding en el router principal hacia el router de estudio (Telefónica) para que los agentes se comuniquen entre ambas redes sin problema.
+
+En resumen: una red ataca, la otra detecta y centraliza. Entre las dos arman el SOC del lab.
+
+
 
 <img width="808" height="608" alt="Caso Diagrama" src="https://github.com/user-attachments/assets/a322f426-e69c-405c-aad4-f4a41cf4d31a" />
 

@@ -87,7 +87,7 @@ Vista de la infraestructura **HomeLab/SOC** con los agentes **Wazuh** desplegado
 | Caso | Descripción |
 |------|------------|
 | [🎯 Orchestrated Attack Framework: Multi-Stage Brute Force & SQLi with Real-Time SIEM Detection (Wazuh)](./casos/caso-1) | Ataque orquestado mediante Scripts : Sqli + fuerza bruta + Analizis y monitoreo |
-| [Phishing-to-Ransomware Kill Chain Detection Lab] (./Phishing-to-Ransomware Kill Chain Detection Lab/)|
+| [Phishing-to-Ransomware Kill Chain Detection Lab](./Phishing-to-Ransomware%20Kill%20Chain%20Detection%20Lab/README.md)|
 | |
 | |
 

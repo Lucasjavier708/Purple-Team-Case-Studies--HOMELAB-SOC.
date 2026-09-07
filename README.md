@@ -91,9 +91,3 @@ Vista de la infraestructura **HomeLab/SOC** con los agentes **Wazuh** desplegado
 | |
 | |
 
-
-# Resultados 
-
-
-
-# Conclusiones 

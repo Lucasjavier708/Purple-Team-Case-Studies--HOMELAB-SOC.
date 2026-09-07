@@ -1,4 +1,6 @@
-<img src="media/blueteam.jpg" width="230"> <img src="media/redteam.jpg" width="230"> <img src="media/wazuh.jpg" width="230">
+<img width="3686" height="838" alt="ANSI Shadow (1)" src="https://github.com/user-attachments/assets/bb5fbb90-5580-484f-acdd-e76efdf0d111" />
+
+
 
 #   Casos Prácticos de Ataque, Detección e Investigación
 Este proyecto está orientado al desarrollo y documentación de casos prácticos que simulan escenarios reales de ataque y defensa dentro de mi HomeLab.

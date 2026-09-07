@@ -1,6 +1,6 @@
 <img src="media/blueteam.jpg" width="230"> <img src="media/redteam.jpg" width="230"> <img src="media/wazuh.jpg" width="230">
 
-#   HOMELAB/SOC  *Analisis de Casos de Estudio*
+#   Casos Prácticos de Ataque, Detección e Investigación
 Este proyecto está orientado al desarrollo y documentación de casos prácticos que simulan escenarios reales de ataque y defensa dentro de mi HomeLab.
 
 Cada caso de estudio comienza con la ejecución de un escenario de ataque (Red Team) y continúa con su detección, análisis, investigación y respuesta desde la perspectiva de un Centro de Operaciones de Seguridad (SOC). Todos los casos son documentados desde su planificación hasta su conclusión.
@@ -8,7 +8,15 @@ Cada caso de estudio comienza con la ejecución de un escenario de ataque (Red T
 ## Objetivo
 Demostrar conocimientos prácticos en ciberseguridad mediante la implementación de una infraestructura de laboratorio, la utilización de herramientas , la aplicación de metodologías y procedimientos empleados en entornos profesionales.
 
+# 📋 Casos de Estudio
 
+Los siguientes escenarios forman parte del laboratorio y serán ampliados progresivamente con nuevos casos de ataque y defensa.
+
+| Caso | Escenario | Principales técnicas | Estado |
+|------|-----------|----------------------|--------|
+| **Caso 01** | [Orchestrated Attack Framework: Multi-Stage Brute Force & SQLi with Real-Time SIEM Detection](./casos/caso-1) | SQL Injection · Brute Force · SIEM Detection | 🟢 Completado |
+| **Caso 02** | Próximamente | — | 🟡 En desarrollo |
+| |  | |  |
 
 
 
@@ -82,12 +90,5 @@ Vista de la infraestructura **HomeLab/SOC** con los agentes **Wazuh** desplegado
 
 
 
-# 📋 Casos de Estudio
 
-| Caso | Descripción |
-|------|------------|
-| [🎯 Orchestrated Attack Framework: Multi-Stage Brute Force & SQLi with Real-Time SIEM Detection (Wazuh)](./casos/caso-1) | Ataque orquestado mediante Scripts : Sqli + fuerza bruta + Analizis y monitoreo |
-| |
-| |
-| |
 

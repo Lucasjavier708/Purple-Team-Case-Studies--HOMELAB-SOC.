@@ -1,4 +1,7 @@
-<img width="3686" height="838" alt="ANSI Shadow (1)" src="https://github.com/user-attachments/assets/bb5fbb90-5580-484f-acdd-e76efdf0d111" />
+<img width="1809" height="580" alt="Diseño sin título" src="https://github.com/user-attachments/assets/1ca0e2cf-b544-4551-8596-dab6ae628bd4" />
+
+
+
 
 
 
